@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.authors     = ["ILL Co."]
   s.email       = ["mike@illcorporation.com", "sean@illcorporation.com", "mat@illcorporation.com"]
   s.homepage    = ""
-  s.summary     = ""
+  s.summary     = "illlocation #{s.version}"
   s.description = "A Rails mountable engine gem with PostGIS location utilities."
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
