@@ -1,0 +1,13 @@
+development:
+  adapter: postgis
+  database: illlocation_development
+  encoding: utf8
+  postgis_extension: postgis
+  schema_search_path: '"$user", public, postgis'
+
+test:
+  adapter: postgis
+  database: illlocation_test
+  encoding: utf8
+  postgis_extension: postgis
+  schema_search_path: '"$user", public, postgis'
