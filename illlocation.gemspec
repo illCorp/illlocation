@@ -22,5 +22,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'factory_girl_rails', '~> 4.3.0'
   s.add_development_dependency "database_cleaner"
   s.add_development_dependency "pg"
+  s.add_development_dependency "rgeo"
   s.add_development_dependency "activerecord-postgis-adapter"
 end
