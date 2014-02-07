@@ -7,7 +7,7 @@ module Illlocation
     private
     
     def set_latlon
-      self.latlon = "POINT(#{latitude} #{longitude})"
+      self.latlon = "POINT(#{longitude} #{latitude})"
     end
   end
 end

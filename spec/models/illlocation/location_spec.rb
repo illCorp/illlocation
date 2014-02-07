@@ -10,7 +10,7 @@ module Illlocation
       )
       
       location.latlon.should_not be_nil
-      location.latlon.to_s.should == "POINT (39.9319 105.0658)"
+      location.latlon.to_s.should == "POINT (105.0658 39.9319)"
     end
   end
 end
