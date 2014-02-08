@@ -1,6 +1,8 @@
 module Illlocation
   class Location < ActiveRecord::Base
-    before_save :set_latlon
+    validates :latitude, :longitude, :latlon, presence: true
+    
+    before_validation :set_latlon
     
     set_rgeo_factory_for_column(:latlon, RGeo::Geographic.spherical_factory(:srid => 4326))
     
