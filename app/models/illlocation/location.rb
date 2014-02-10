@@ -4,6 +4,8 @@ module Illlocation
     
     before_validation :set_latlon
     
+    has_many :checkins
+    
     set_rgeo_factory_for_column(:latlon, RGeo::Geographic.spherical_factory(:srid => 4326))
     
     private

@@ -4,10 +4,10 @@ class CreateIlllocationLocations < ActiveRecord::Migration
   
   def change
     create_table :illlocation_locations do |t|
-      t.string   "latitude"
-      t.string   "longitude"
-      t.spatial  "latlon", :limit => {:srid => SPATIAL_REFERENCE_ID, :type => SPATIAL_DATA_TYPE, :geographic => true}
-      t.string   "altitude"
+      t.string   :latitude
+      t.string   :longitude
+      t.spatial  :latlon, :limit => {:srid => SPATIAL_REFERENCE_ID, :type => SPATIAL_DATA_TYPE, :geographic => true}
+      t.string   :altitude
       t.timestamps
     end
   end
