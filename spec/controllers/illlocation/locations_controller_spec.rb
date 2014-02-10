@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module Illlocation
-  describe LocationController do
+  describe LocationsController do
     
     describe "POST 'create'" do
       let(:location) do

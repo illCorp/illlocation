@@ -1,7 +1,7 @@
 require_dependency "illlocation/application_controller"
 
 module Illlocation
-  class LocationController < ApplicationController    
+  class LocationsController < ApplicationController    
     def create
       @location = Location.new(location_params)
       
