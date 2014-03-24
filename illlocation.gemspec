@@ -7,7 +7,7 @@ require "illlocation/version"
 Gem::Specification.new do |s|
   s.name        = "illlocation"
   s.version     = Illlocation::VERSION
-  s.authors     = ["ILL Co."]
+  s.authors     = ["illCorp"]
   s.email       = ["mike@illcorporation.com", "sean@illcorporation.com", "mat@illcorporation.com"]
   s.homepage    = ""
   s.summary     = "illlocation #{s.version}"
