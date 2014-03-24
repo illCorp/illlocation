@@ -1,7 +1,7 @@
 class CreateIlllocationCheckins < ActiveRecord::Migration
   def change
     create_table :illlocation_checkins do |t|
-      t.references :location
+      t.references :location, index: true
       t.integer :locatable_id
       t.string :locatable_type
       t.timestamps
