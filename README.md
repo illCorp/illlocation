@@ -37,7 +37,7 @@ rake db:migrate SCOPE=illlocation
 ### 5.  You should a Location and Checkin table
 ````
 rails console
-2.1.0 :006 > Illlocation::Engine::Checkin.count
+2.1.0 :006 > Illlocation::Checkin.count
    (3.8ms)  SELECT f_geometry_column,coord_dimension,srid,type FROM geometry_columns WHERE f_table_name='illlocation_checkins'
    (0.6ms)  SELECT COUNT(*) FROM "illlocation_checkins"
  => 0
