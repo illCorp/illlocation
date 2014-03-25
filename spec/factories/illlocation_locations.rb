@@ -5,5 +5,6 @@ FactoryGirl.define do
     latitude "39.9319"
     longitude "105.0658"
     altitude "1724"    
+    radius 400
   end
 end

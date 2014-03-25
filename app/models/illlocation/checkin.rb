@@ -17,18 +17,16 @@ module Illlocation
       locatable_types_string = "'#{locatable_types.join("','")}'"
       
       if locatable_types.any?
-        sql = "SELECT illlocation_checkins.*, ST_Distance(illlocation_locations.latlon, #{center}) as distance 
+        sql = "SELECT illlocation_checkins.*, ST_Distance(illlocation_checkins.latlon, #{center}) as distance 
                FROM illlocation_checkins
-               INNER JOIN illlocation_locations ON illlocation_checkins.location_id = illlocation_locations.id
-               WHERE ST_DWithin(illlocation_locations.latlon, #{center}, #{distance})
+               WHERE ST_DWithin(illlocation_checkins.latlon, #{center}, #{distance})
                AND illlocation_checkins.locatable_type IN (#{locatable_types_string})
                ORDER BY distance ASC 
                LIMIT #{limit}"
       else
-        sql = "SELECT illlocation_checkins.*, ST_Distance(illlocation_locations.latlon, #{center}) as distance 
+        sql = "SELECT illlocation_checkins.*, ST_Distance(illlocation_checkins.latlon, #{center}) as distance 
                FROM illlocation_checkins
-               INNER JOIN illlocation_locations ON illlocation_checkins.location_id = illlocation_locations.id
-               WHERE ST_DWithin(illlocation_locations.latlon, #{center}, #{distance})
+               WHERE ST_DWithin(illlocation_checkins.latlon, #{center}, #{distance})
                ORDER BY distance ASC 
                LIMIT #{limit}"
       end

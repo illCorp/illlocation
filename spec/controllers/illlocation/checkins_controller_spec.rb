@@ -8,12 +8,9 @@ module Illlocation
           {
             checkin: {
               locatable_id: 1,
-              locatable_type: "User"
-            },
-            location: {
+              locatable_type: "User",
               latitude: "39.9319",
-              longitude: "105.0658",
-              altitude: "1724"      
+              longitude: "105.0658"
             }
           }
         end
@@ -22,20 +19,6 @@ module Illlocation
           post :create, params.merge!(use_route: :illlocation).merge!(format: :json)
           
           expect(response).to be_success
-        end
-        
-        it "saves the location if does not exist" do
-          expect {
-            post :create, params.merge!(use_route: :illlocation).merge!(format: :json)
-          }.to change{ Location.count }.by(1)
-        end
-       
-        it "does not save the location if it already exists" do
-          create(:illlocation_location)
-         
-          expect {
-            post :create, params.merge!(use_route: :illlocation).merge!(format: :json)
-          }.not_to change{ Location.count }
         end
        
         it "returns the saved checkin" do
@@ -48,7 +31,7 @@ module Illlocation
     end
     
     describe "GET 'find_near_lat_lon'" do
-      context "when a location is given without filters" do
+      context "when coordinates are given without filters" do
         let(:params) do
           {
             latitude: "39.9319",
@@ -63,7 +46,7 @@ module Illlocation
         end
       end
       
-      context "when a location is given with filters" do      
+      context "when a coordinates are given with filters" do      
         it "returns a maximum of the given limit" do
           params = {
             latitude: "39.9319",
@@ -71,9 +54,8 @@ module Illlocation
             limit: 1
           }
           
-          location = Location.create(latitude: "39.9319", longitude: "105.0658")
-          checkin = Checkin.create(location_id: location.id, locatable_id: 1, locatable_type: "User")
-          another_checkin = Checkin.create(location_id: location.id, locatable_id: 1, locatable_type: "User") 
+          checkin = Checkin.create(latitude: "39.9319", longitude: "105.0658", locatable_id: 1, locatable_type: "User")
+          another_checkin = Checkin.create(latitude: "39.9319", longitude: "105.0658", locatable_id: 1, locatable_type: "User") 
                     
           get :find_near_lat_lon, params.merge!(use_route: :illlocation).merge!(format: :json)
           
@@ -88,10 +70,9 @@ module Illlocation
             locatable_types: ["User", "Airplane"]
           }
           
-          location = Location.create(latitude: "39.9319", longitude: "105.0658")
-          Checkin.create(location_id: location.id, locatable_id: 1, locatable_type: "User")
-          Checkin.create(location_id: location.id, locatable_id: 2, locatable_type: "Shark")
-          Checkin.create(location_id: location.id, locatable_id: 3, locatable_type: "Airplane")
+          Checkin.create(latitude: "39.9319", longitude: "105.0658", locatable_id: 1, locatable_type: "User")
+          Checkin.create(latitude: "39.9319", longitude: "105.0658", locatable_id: 2, locatable_type: "Shark")
+          Checkin.create(latitude: "39.9319", longitude: "105.0658", locatable_id: 3, locatable_type: "Airplane")
                     
           get :find_near_lat_lon, params.merge!(use_route: :illlocation).merge!(format: :json)
           
@@ -100,15 +81,17 @@ module Illlocation
         end
       
         it "only returns checkins within the given distance" do
-          broomfield = Location.create(latitude: "39.9319", longitude: "105.0658")
-          tokyo = Location.create(latitude: "35.6895", longitude: "139.6917")
+          broomfield_latitude = "39.9319"
+          broomfield_longitude = "105.0658"
+          tokyo_latitude = "35.6895"
+          tokyo_longitude = "139.6917"
 
-          broomfield_checkin = Checkin.create(location_id: broomfield.id, locatable_id: 1, locatable_type: "User")
-          tokyo_checkin = Checkin.create(location_id: tokyo.id, locatable_id: 1, locatable_type: "User")
+          broomfield_checkin = Checkin.create(latitude: broomfield_latitude, longitude: broomfield_longitude, locatable_id: 1, locatable_type: "User")
+          tokyo_checkin = Checkin.create(latitude: tokyo_latitude, longitude: tokyo_longitude, locatable_id: 1, locatable_type: "User")
           
           params = {
-            latitude: broomfield.latitude,
-            longitude: broomfield.longitude,
+            latitude: broomfield_latitude,
+            longitude: broomfield_longitude,
             distance: 3
           }
             

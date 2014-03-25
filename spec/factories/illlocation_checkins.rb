@@ -2,8 +2,9 @@
 
 FactoryGirl.define do
   factory :illlocation_checkin, :class => 'Illlocation::Checkin' do
-    location factory: :illlocation_location
     locatable_id 1
     locatable_type "User"
+    latitude "39.9319"
+    longitude "105.0658"
   end
 end

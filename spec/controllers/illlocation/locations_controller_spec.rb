@@ -8,7 +8,8 @@ module Illlocation
         {
           :latitude => "39.9319", 
           :longitude => "105.0658", 
-          :altitude => "1724"
+          :altitude => "1724",
+          :radius => 400
         }
       end
       
@@ -30,7 +31,8 @@ module Illlocation
           {
             :latitude => nil, 
             :longitude => nil, 
-            :altitude => "1724"
+            :altitude => "1724",
+            :radius => 400
           }
         end
         

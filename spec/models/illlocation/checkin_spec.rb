@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module Illlocation
   describe Checkin do
-    # self.find_near_lat_lon covered in controller spec
+    # self.find_near_lat_lon covered in controller spec_helper
     
     describe "#add_attributes" do
       let(:checkin) { create(:illlocation_checkin) }

@@ -4,7 +4,6 @@ module Illlocation
   class CheckinsController < ApplicationController
     def create
       @checkin = Checkin.new(checkin_params)
-      @checkin.location = Location.where(location_params).first_or_create
       
       respond_to do |format|
         if @checkin.save
@@ -37,13 +36,7 @@ module Illlocation
     def checkin_params
       params
         .require(:checkin)
-        .permit(:location_id, :locatable_id, :locatable_type)
-    end
-  
-    def location_params
-      params
-        .require(:location)
-        .permit(:latitude, :longitude, :altitude)
+        .permit(:latitude, :longitude, :latlon, :locatable_id, :locatable_type)
     end
     
     def find_params

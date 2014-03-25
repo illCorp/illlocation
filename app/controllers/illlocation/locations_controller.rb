@@ -17,7 +17,7 @@ module Illlocation
     private
     
     def location_params
-      params.require(:location).permit(:latitude, :longitude, :altitude)
+      params.require(:location).permit(:latitude, :longitude, :altitude, :radius)
     end
   end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140325201751) do
+ActiveRecord::Schema.define(version: 20140325202900) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,18 +32,12 @@ ActiveRecord::Schema.define(version: 20140325201751) do
     t.string   "locatable_type"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "latitude"
+    t.string   "longitude"
+    t.spatial  "latlon",         limit: {:srid=>4326, :type=>"point", :geographic=>true}
   end
 
   add_index "illlocation_checkins", ["locatable_id", "locatable_type"], :name => "index_illlocation_checkins_on_locatable_id_and_locatable_type"
-
-  create_table "illlocation_illlocation_tags", force: true do |t|
-    t.integer  "location_id"
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "illlocation_illlocation_tags", ["location_id"], :name => "index_illlocation_illlocation_tags_on_location_id"
 
   create_table "illlocation_locations", force: true do |t|
     t.string   "latitude"
@@ -54,5 +48,14 @@ ActiveRecord::Schema.define(version: 20140325201751) do
     t.datetime "updated_at"
     t.integer  "radius"
   end
+
+  create_table "illlocation_tags", force: true do |t|
+    t.integer  "location_id"
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "illlocation_tags", ["location_id"], :name => "index_illlocation_tags_on_location_id"
 
 end
