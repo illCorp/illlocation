@@ -36,15 +36,7 @@ ActiveRecord::Schema.define(version: 20140325041550) do
   end
 
   add_index "illlocation_checkins", ["locatable_id", "locatable_type"], :name => "index_illlocation_checkins_on_locatable_id_and_locatable_type"
-
-  create_table "illlocation_illlocation_tags", force: true do |t|
-    t.integer  "location_id"
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "illlocation_illlocation_tags", ["location_id"], :name => "index_illlocation_illlocation_tags_on_location_id"
+  add_index "illlocation_checkins", ["location_id"], :name => "index_illlocation_checkins_on_location_id"
 
   create_table "illlocation_locations", force: true do |t|
     t.string   "latitude"
@@ -54,5 +46,14 @@ ActiveRecord::Schema.define(version: 20140325041550) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "illlocation_tags", force: true do |t|
+    t.integer  "location_id"
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "illlocation_tags", ["location_id"], :name => "index_illlocation_tags_on_location_id"
 
 end

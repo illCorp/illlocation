@@ -9,6 +9,19 @@ module Illlocation
     
     set_rgeo_factory_for_column(:latlon, RGeo::Geographic.spherical_factory(:srid => 4326))
     
+    def add_tag(name)
+      tags.create(name: name)
+    end
+    
+    def remove_tag(name)
+      tag = tags.where(name: name).first
+      tag.destroy if tag
+    end
+    
+    def has_tag?(name)
+      tags.where(name: name).any?
+    end
+    
     private
     
     def set_latlon
