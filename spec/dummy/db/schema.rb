@@ -11,11 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140325040605) do
+ActiveRecord::Schema.define(version: 20140325041550) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
+
+  create_table "illlocation_checkin_attributes", force: true do |t|
+    t.integer  "checkin_id"
+    t.string   "key"
+    t.string   "value"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "illlocation_checkin_attributes", ["checkin_id"], :name => "index_illlocation_checkin_attributes_on_checkin_id"
 
   create_table "illlocation_checkins", force: true do |t|
     t.integer  "location_id"
