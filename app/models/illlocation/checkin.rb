@@ -1,8 +1,9 @@
 module Illlocation
   class Checkin < ActiveRecord::Base
-    validates :location_id, :locatable_id, :locatable_type, presence: true
+    validates :latitude, :longitude, :latlon, :locatable_id, :locatable_type, presence: true
     
-    belongs_to :location
+    before_validation :set_latlon
+    
     has_many :checkin_attributes
     
     DEFAULT_SEARCH_LIMIT = 50
@@ -49,6 +50,12 @@ module Illlocation
     
     def has_attribute?(key)
       checkin_attributes.where(key: key).any?
+    end
+    
+    private
+    
+    def set_latlon
+      self.latlon = "POINT(#{longitude} #{latitude})"
     end
   end
 end
