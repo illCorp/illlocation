@@ -3,6 +3,7 @@ module Illlocation
     validates :location_id, :locatable_id, :locatable_type, presence: true
     
     belongs_to :location
+    has_many :checkin_attributes
     
     DEFAULT_SEARCH_LIMIT = 50
     DEFAULT_SEARCH_DISTANCE_METERS = 1600
@@ -33,6 +34,21 @@ module Illlocation
 
       puts sql
       find_by_sql(sql)
+    end
+    
+    def add_attributes(checkin_attributes_hash = {})
+      checkin_attributes_hash.each do |key, value|
+        checkin_attributes.create(key: key.to_s, value: value)        
+      end
+    end
+    
+    def remove_attribute_with_key(key)
+      attribute = checkin_attributes.where(key: key).first
+      attribute.destroy if attribute
+    end
+    
+    def has_attribute?(key)
+      checkin_attributes.where(key: key).any?
     end
   end
 end
