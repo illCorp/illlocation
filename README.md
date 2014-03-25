@@ -45,7 +45,7 @@ rails console
 
 ### Models
 * Location - a lat, lon, and optional altitude
-* LocationTag - belongs to a location. Ex: gas station, taco stand 
+* Tag - belongs to a location. Ex: gas station, taco stand 
 * Checkin - A locatable (Ex: "User", "Tornado", "Airplane") that has a location
 * CheckinAttribute - belongs to a checkin, something you may want to display along with a pin on a map Ex: {:avatar_url => "http://sharknado_tracker.org/users/mike"}
 
