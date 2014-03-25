@@ -54,6 +54,12 @@ This [app](https://github.com/illCorp/sharknado_tracker) demonstrates some commo
 
 *More coming soon*
 
+## Discussion
+* How precise should a location be?  Consider tags and checkins.
 
+
+## Contributing
+Our goal with this project was to quickly extract and refactor some common location related code that is in several projects.  We're not sure how much time we'll spend maintaining and we may get more formal about the contribution process later.  For now - send us anything.
+	
 ## License
 This project rocks and uses MIT-LICENSE.
