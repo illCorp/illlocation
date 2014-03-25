@@ -34,7 +34,7 @@ rake illlocation:install:migrations
 rake db:migrate SCOPE=illlocation
 ````
 
-### 5.  You should a Location and Checkin table
+### 5.  You should have a Location and Checkin table
 ````
 rails console
 2.1.0 :006 > Illlocation::Checkin.count
@@ -42,6 +42,12 @@ rails console
    (0.6ms)  SELECT COUNT(*) FROM "illlocation_checkins"
  => 0
 ````
+
+### Models
+* Location - a lat, lon, and optional altitude
+* LocationTag - belongs to a location. Ex: gas station, taco stand 
+* Checkin - A locatable (Ex: "User", "Tornado", "Airplane") that has a location
+* CheckinAttribute - belongs to a checkin, something you may want to display along with a pin on a map Ex: {:avatar_url => "http://sharknado_tracker.org/users/mike"}
 
 ## Usage
 This [app](https://github.com/illCorp/sharknado_tracker) demonstrates some common usage.
