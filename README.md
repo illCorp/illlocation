@@ -50,12 +50,13 @@ rails console
 * CheckinAttribute - belongs to a checkin, something you may want to display along with a pin on a map Ex: {:avatar_url => "http://sharknado_tracker.org/users/mike"}
 
 ## Usage
-This [app](https://github.com/illCorp/sharknado_tracker) demonstrates some common usage.
+This [sharknado tracker app](https://github.com/illCorp/sharknado_tracker) demonstrates some common usage.
 
 *More coming soon*
 
-## Discussion
+## Discussion 
 * How precise should a location be?  Consider tags and checkins.
+* Thinking of removing create action from Locations and Checkins controller.  These are pretty plain and more than likely, the host application will be doing this in it's own way - for example, create CheckinAttributes at the same time.  This engine should focus on having a flexible vanialla data model (we're close to there), and then offer some great search features with scoped class methods.  
 
 
 ## Contributing
