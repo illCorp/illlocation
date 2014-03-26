@@ -3,14 +3,14 @@ require 'spec_helper'
 module Illlocation
   describe Checkin do
     let(:latitude) { 39.9319 }
-    let(:longitude) { 105.0658 }
+    let(:longitude) { -105.0658 }
     
     describe ".find_near_lat_lon" do
       it "returns a maximum of the given limit" do
         filters = { limit: 1 }
         
-        Checkin.create(latitude: "39.9319", longitude: "105.0658", locatable_id: 1, locatable_type: "User")
-        Checkin.create(latitude: "39.9319", longitude: "105.0658", locatable_id: 2, locatable_type: "User") 
+        Checkin.create(latitude: "39.9319", longitude: "-105.0658", locatable_id: 1, locatable_type: "User")
+        Checkin.create(latitude: "39.9319", longitude: "-105.0658", locatable_id: 2, locatable_type: "User") 
                   
         results = Checkin.find_near_lat_lon(latitude, longitude, filters)
         expect(results.count).to eq(1)
@@ -19,7 +19,7 @@ module Illlocation
     
     it "only returns checkins within the given distance" do
       broomfield_latitude = "39.9319"
-      broomfield_longitude = "105.0658"
+      broomfield_longitude = "-105.0658"
       tokyo_latitude = "35.6895"
       tokyo_longitude = "139.6917"
       
@@ -37,9 +37,9 @@ module Illlocation
     it "only returns checkins with locatable_types when given" do
       filters = { locatable_types: ["User", "Airplane"] }
       
-      user_checkin = Checkin.create(latitude: "39.9319", longitude: "105.0658", locatable_id: 1, locatable_type: "User")
-      shark_checkin = Checkin.create(latitude: "39.9319", longitude: "105.0658", locatable_id: 2, locatable_type: "Shark")
-      airplane_checkin = Checkin.create(latitude: "39.9319", longitude: "105.0658", locatable_id: 3, locatable_type: "Airplane")
+      user_checkin = Checkin.create(latitude: "39.9319", longitude: "-105.0658", locatable_id: 1, locatable_type: "User")
+      shark_checkin = Checkin.create(latitude: "39.9319", longitude: "-105.0658", locatable_id: 2, locatable_type: "Shark")
+      airplane_checkin = Checkin.create(latitude: "39.9319", longitude: "-105.0658", locatable_id: 3, locatable_type: "Airplane")
 
       results = Checkin.find_near_lat_lon(latitude, longitude, filters)
       
@@ -96,13 +96,13 @@ module Illlocation
       
       let!(:broomfield_checkin) {
         broomfield_latitude = 39.9319
-        broomfield_longitude = 105.0658
+        broomfield_longitude = -105.0658
         Checkin.create(latitude: broomfield_latitude, longitude: broomfield_longitude, locatable_id: 1, locatable_type: "User")
       }
 
       let!(:denver_checkin) {
         denver_latitude = 39.7392
-        denver_longitude = 104.9847
+        denver_longitude = -104.9847
         Checkin.create(latitude: denver_latitude, longitude: denver_longitude, locatable_id: 1, locatable_type: "User")
       }
       
@@ -113,7 +113,9 @@ module Illlocation
       }
       
       it "only returns checkins that are within the box" do
-        raise "pick up here"
+        results = Checkin.find_in_box(colorado_box)
+        
+        expect(results).to match_array([broomfield_checkin, denver_checkin])
       end
       
     end
