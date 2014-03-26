@@ -4,7 +4,7 @@ Rails Engine with location services using PostGIS.
 ## Requirements
 * Rails Application must use 4.0.3 or later.
 * Postgres database ('pg' and 'activerecord-postgis-adapter' gems in Gemfile)
-* postgis adapter in *database.yml*
+* Use postgis adapter in *database.yml*?
 
 ## Setup
 ### 1. Reference the engine in the *Gemfile* of your Rails application
@@ -33,7 +33,7 @@ rake illlocation:install:migrations
 rake db:migrate SCOPE=illlocation
 ````
 
-### 5.  You should have a Location and Checkin models
+### 5.  You should have Illlocation models available
 ````
 rails console
 2.1.0 :006 > Illlocation::Checkin.count
@@ -55,7 +55,17 @@ rails console
 * **Tag**: belongs to a location. Ex: gas station, taco stand 
 
 ## Usage
-**TODO: show some common usage**
+**Create a Checkin** 
+Todo: test this
+
+````
+Checkin.create(latitude: 39.9319, longitude: -105.0658, locatable_id: 1, locatable_type: "User")
+
+#or
+
+user = User.first
+Checkin.create(latitude: 39.9319, longitude: -105.0658, locatable: user)
+````
 
 ## Example
 *To be done:* This [sharknado tracker app](https://github.com/illCorp/sharknado_tracker) demonstrates some common usage.
