@@ -4,6 +4,7 @@ module Illlocation
     
     before_validation :set_latlon
     
+    belongs_to :locatable, polymorphic: true
     has_many :checkin_attributes
     
     DEFAULT_SEARCH_LIMIT = 50
