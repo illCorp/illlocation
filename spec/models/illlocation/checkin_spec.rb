@@ -103,7 +103,7 @@ module Illlocation
       let!(:denver_checkin) {
         denver_latitude = 39.7392
         denver_longitude = -104.9847
-        Checkin.create(latitude: denver_latitude, longitude: denver_longitude, locatable_id: 1, locatable_type: "User")
+        Checkin.create(latitude: denver_latitude, longitude: denver_longitude, locatable_id: 1, locatable_type: "Airplane")
       }
       
       let!(:tokyo_checkin) {
@@ -118,6 +118,13 @@ module Illlocation
         expect(results).to match_array([broomfield_checkin, denver_checkin])
       end
       
+      it "only returns checkins with the given locatable_types" do
+        filters = { locatable_types: ["User"] }
+      
+        results = Checkin.find_in_box(colorado_box, filters)
+      
+        expect(results).to match_array([broomfield_checkin])
+      end
     end
     
     describe "#remove_attribute_with_key" do

@@ -45,9 +45,17 @@ module Illlocation
       min_y = box[:bottom_right][:latitude]
       max_y = box[:top_left][:latitude]
       
+      locatable_types = filters[:locatable_types].nil? ? [] : filters[:locatable_types]
+      
       sql = "SELECT illlocation_checkins.*
              FROM illlocation_checkins 
              WHERE ST_Intersects(latlon, ST_MakeEnvelope(#{min_x}, #{min_y}, #{max_x}, #{max_y})) "             
+
+      if locatable_types.any?
+        locatable_types_string = "'#{filters[:locatable_types].join("','")}'"
+        sql << "AND illlocation_checkins.locatable_type IN (#{locatable_types_string}) "
+      end
+
       puts sql
       find_by_sql(sql)
     end
