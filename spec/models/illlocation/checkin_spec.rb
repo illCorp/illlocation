@@ -2,7 +2,59 @@ require 'spec_helper'
 
 module Illlocation
   describe Checkin do
-    # self.find_near_lat_lon covered in controller spec_helper
+    describe ".find_near_lat_lon" do
+      it "returns a maximum of the given limit" do
+        filters = {
+          latitude: "39.9319",
+          longitude: "105.0658",
+          limit: 1
+        }
+        
+        Checkin.create(latitude: "39.9319", longitude: "105.0658", locatable_id: 1, locatable_type: "User")
+        Checkin.create(latitude: "39.9319", longitude: "105.0658", locatable_id: 2, locatable_type: "User") 
+                  
+        results = Checkin.find_near_lat_lon(filters)
+        expect(results.count).to eq(1)
+      end  
+    end
+    
+    it "only returns checkins within the given distance" do
+      broomfield_latitude = "39.9319"
+      broomfield_longitude = "105.0658"
+      tokyo_latitude = "35.6895"
+      tokyo_longitude = "139.6917"
+      
+      broomfield_checkin = Checkin.create(latitude: broomfield_latitude, longitude: broomfield_longitude, locatable_id: 1, locatable_type: "User")
+      tokyo_checkin = Checkin.create(latitude: tokyo_latitude, longitude: tokyo_longitude, locatable_id: 1, locatable_type: "User")
+      
+      filters = {
+        latitude: broomfield_latitude,
+        longitude: broomfield_longitude,
+        distance: 400
+      }
+        
+      results = Checkin.find_near_lat_lon(filters)
+      
+      expect(results.count).to eq(1)
+      expect(results.first).to eq(broomfield_checkin)
+    end
+    
+    it "only returns checkins with locatable_types when given" do
+      filters = {
+        latitude: "39.9319",
+        longitude: "105.0658",
+        locatable_types: ["User", "Airplane"]
+      }
+      
+      user_checkin = Checkin.create(latitude: "39.9319", longitude: "105.0658", locatable_id: 1, locatable_type: "User")
+      shark_checkin = Checkin.create(latitude: "39.9319", longitude: "105.0658", locatable_id: 2, locatable_type: "Shark")
+      airplane_checkin = Checkin.create(latitude: "39.9319", longitude: "105.0658", locatable_id: 3, locatable_type: "Airplane")
+
+      results = Checkin.find_near_lat_lon(filters)
+      
+      expect(results.count).to eq(2)
+      expect(results).to match_array([user_checkin, airplane_checkin])
+    end
     
     describe "#add_attributes" do
       let(:checkin) { create(:illlocation_checkin) }

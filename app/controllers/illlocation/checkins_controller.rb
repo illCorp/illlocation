@@ -15,18 +15,8 @@ module Illlocation
     end
     
     def find_near_lat_lon
-      latitude = find_params[:latitude]
-      longitude = find_params[:longitude]
-      
-      # Not sure why these fields do not require strong params
-      #limit = find_params.has_key?(:limit) ? find_params[:limit] : nil
-      #distance = find_params.has_key?(:distance) ? find_params[:distance] : nil
-      #locatable_types = find_params.has_key?(:locatable_types) ? find_params[:locatable_types] : []
-      limit = params.has_key?(:limit) ? params[:limit] : nil
-      distance = params.has_key?(:distance) ? params[:distance] : nil
-      locatable_types = params.has_key?(:locatable_types) ? params[:locatable_types] : []
-
-      @checkins = Checkin.find_near_lat_lon(latitude, longitude, limit, distance, locatable_types)
+      filters = params.merge(find_params).slice(:latitude, :longitude, :limit, :distance, :locatable_types, :earliest_timestamp, :latest_timestamp)
+      @checkins = Checkin.find_near_lat_lon(filters)
       
       respond_with(@checkins)
     end
@@ -45,7 +35,9 @@ module Illlocation
         :longitude,
         :limit,
         :distance,
-        :locatable_types
+        :locatable_types,
+        :earliest_timestamp,
+        :latest_timestamp
       )
     end
   end

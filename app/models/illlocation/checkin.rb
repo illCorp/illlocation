@@ -6,30 +6,38 @@ module Illlocation
     
     has_many :checkin_attributes
     
+    DEFAULT_LATITUDE = 51.4791
+    DEFAULT_LONGITUDE = 0.0000
     DEFAULT_SEARCH_LIMIT = 50
     DEFAULT_SEARCH_DISTANCE_METERS = 1600
     
-    def self.find_near_lat_lon(latitude, longitude, limit, distance, locatable_types)
-      limit = DEFAULT_SEARCH_LIMIT if limit.nil?
-      distance = DEFAULT_SEARCH_DISTANCE_METERS if distance.nil?
+    def self.find_near_lat_lon(filters)
+      latitude = filters[:latitude].nil? ? DEFAULT_LATITUDE : filters[:latitude]
+      longitude = filters[:longitude].nil? ? DEFAULT_LONGITUDE : filters[:longitude]
+      limit = filters[:limit].nil? ? DEFAULT_SEARCH_LIMIT : filters[:limit]
+      distance = filters[:distance].nil? ? DEFAULT_SEARCH_DISTANCE_METERS : filters[:distance]
+      locatable_types = filters[:locatable_types].nil? ? [] : filters[:locatable_types]
+      earliest_timestamp = filters[:earliest_timestamp]
+      latest_timestamp = filters[:latest_timestamp]
       
       center = "'POINT(#{longitude} #{latitude})'"
-      locatable_types_string = "'#{locatable_types.join("','")}'"
       
+      sql = "SELECT illlocation_checkins.*, ST_Distance(illlocation_checkins.latlon, #{center}) as distance 
+             FROM illlocation_checkins
+             WHERE ST_DWithin(illlocation_checkins.latlon, #{center}, #{distance}) "
+
       if locatable_types.any?
-        sql = "SELECT illlocation_checkins.*, ST_Distance(illlocation_checkins.latlon, #{center}) as distance 
-               FROM illlocation_checkins
-               WHERE ST_DWithin(illlocation_checkins.latlon, #{center}, #{distance})
-               AND illlocation_checkins.locatable_type IN (#{locatable_types_string})
-               ORDER BY distance ASC 
-               LIMIT #{limit}"
-      else
-        sql = "SELECT illlocation_checkins.*, ST_Distance(illlocation_checkins.latlon, #{center}) as distance 
-               FROM illlocation_checkins
-               WHERE ST_DWithin(illlocation_checkins.latlon, #{center}, #{distance})
-               ORDER BY distance ASC 
-               LIMIT #{limit}"
+        locatable_types_string = "'#{filters[:locatable_types].join("','")}'"
+        sql << "AND illlocation_checkins.locatable_type IN (#{locatable_types_string}) "
       end
+      
+      # TODO: creation time filters
+      #if earliest_timestamp && latest_timestamp
+      #elsif earliest_timestamp && latest_timestamp.nil?
+      #elsif earliest_timestamp.nil? && latest_timestamp
+      #end
+      
+      sql << "ORDER BY distance ASC LIMIT #{limit};"
 
       puts sql
       find_by_sql(sql)
