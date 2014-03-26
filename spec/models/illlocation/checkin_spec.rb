@@ -74,6 +74,50 @@ module Illlocation
       end
     end
     
+    describe ".find_in_box" do
+      let(:colorado_box) {
+        colorado_top_left_latitude = 41.0004
+        colorado_top_left_longitude = -109.0497
+        colorado_bottom_right_latitude = 36.9937
+        colorado_bottom_right_longitude = -102.0424
+        
+        box = { 
+          top_left: { 
+            latitude: colorado_top_left_latitude, 
+            longitude: colorado_top_left_longitude 
+          }, 
+          bottom_right: { 
+            latitude: colorado_bottom_right_latitude, 
+            longitude: colorado_bottom_right_longitude 
+          }
+        }
+        box
+      }
+      
+      let!(:broomfield_checkin) {
+        broomfield_latitude = 39.9319
+        broomfield_longitude = 105.0658
+        Checkin.create(latitude: broomfield_latitude, longitude: broomfield_longitude, locatable_id: 1, locatable_type: "User")
+      }
+
+      let!(:denver_checkin) {
+        denver_latitude = 39.7392
+        denver_longitude = 104.9847
+        Checkin.create(latitude: denver_latitude, longitude: denver_longitude, locatable_id: 1, locatable_type: "User")
+      }
+      
+      let!(:tokyo_checkin) {
+        tokyo_latitude = 35.6895
+        tokyo_longitude = 139.6917
+        Checkin.create(latitude: tokyo_latitude, longitude: tokyo_longitude, locatable_id: 1, locatable_type: "User")
+      }
+      
+      it "only returns checkins that are within the box" do
+        raise "pick up here"
+      end
+      
+    end
+    
     describe "#remove_attribute_with_key" do
       let(:checkin) { create(:illlocation_checkin) }
       

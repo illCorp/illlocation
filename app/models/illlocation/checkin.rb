@@ -39,7 +39,7 @@ module Illlocation
       find_by_sql(sql)
     end
     
-    def self.find_in_box
+    def self.find_in_box(box, filters)
       
     end
     
