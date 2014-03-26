@@ -33,8 +33,8 @@ module Illlocation
     describe "GET 'find_near_lat_lon'" do
       let(:params) do
         {
-          latitude: "39.9319",
-          longitude: "105.0658",
+          latitude: 39.9319,
+          longitude: 105.0658,
           limit: 5, 
           distance: 400, 
           locatable_types: "[User, Airplane]", 
@@ -45,15 +45,17 @@ module Illlocation
       end
       
       it "forwards valid filters to the find method" do
-        expect(Checkin).to receive(:find_near_lat_lon).with({
-          latitude: "39.9319",
-          longitude: "105.0658",
-          limit: 5, 
-          distance: 400, 
-          locatable_types: "[User, Airplane]", 
-          earliest_timestamp: "2013-03-25T15:27:15-06:00", 
-          latest_timestamp: "2014-03-25T15:27:15-06:00"
-        })
+        expect(Checkin).to receive(:find_near_lat_lon).with(
+          39.9319,
+          105.0658,
+          {
+            limit: 5, 
+            distance: 400, 
+            locatable_types: "[User, Airplane]", 
+            earliest_timestamp: "2013-03-25T15:27:15-06:00", 
+            latest_timestamp: "2014-03-25T15:27:15-06:00"
+          }
+        )
         
         get :find_near_lat_lon, params.merge!(use_route: :illlocation).merge!(format: :json)
       end

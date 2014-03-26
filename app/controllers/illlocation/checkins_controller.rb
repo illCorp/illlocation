@@ -15,8 +15,8 @@ module Illlocation
     end
     
     def find_near_lat_lon
-      filters = params.merge(find_params).slice(:latitude, :longitude, :limit, :distance, :locatable_types, :earliest_timestamp, :latest_timestamp)
-      @checkins = Checkin.find_near_lat_lon(filters)
+      filters = params.merge(find_params).slice(:limit, :distance, :locatable_types, :earliest_timestamp, :latest_timestamp)
+      @checkins = Checkin.find_near_lat_lon(find_params[:latitude], find_params[:longitude], filters)
       
       respond_with(@checkins)
     end

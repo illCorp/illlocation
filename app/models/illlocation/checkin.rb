@@ -6,14 +6,10 @@ module Illlocation
     
     has_many :checkin_attributes
     
-    DEFAULT_LATITUDE = 51.4791
-    DEFAULT_LONGITUDE = 0.0000
     DEFAULT_SEARCH_LIMIT = 50
     DEFAULT_SEARCH_DISTANCE_METERS = 1600
     
-    def self.find_near_lat_lon(filters)
-      latitude = filters[:latitude].nil? ? DEFAULT_LATITUDE : filters[:latitude]
-      longitude = filters[:longitude].nil? ? DEFAULT_LONGITUDE : filters[:longitude]
+    def self.find_near_lat_lon(latitude, longitude, filters)
       limit = filters[:limit].nil? ? DEFAULT_SEARCH_LIMIT : filters[:limit]
       distance = filters[:distance].nil? ? DEFAULT_SEARCH_DISTANCE_METERS : filters[:distance]
       locatable_types = filters[:locatable_types].nil? ? [] : filters[:locatable_types]
@@ -41,6 +37,10 @@ module Illlocation
 
       puts sql
       find_by_sql(sql)
+    end
+    
+    def self.find_in_box
+      
     end
     
     def add_attributes(checkin_attributes_hash = {})
