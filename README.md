@@ -55,23 +55,79 @@ rails console
 * **Tag**: belongs to a location. Ex: gas station, taco stand 
 
 ## Usage
-**Create a Checkin** 
-Todo: test this
+**Manually create a Checkin** 
 
 ````
 Checkin.create(latitude: 39.9319, longitude: -105.0658, locatable_id: 1, locatable_type: "User")
-
-#or
-
+````
+````
 user = User.first
-Checkin.create(latitude: 39.9319, longitude: -105.0658, locatable: user)
+Illlocation::Checkin.create(latitude: 39.9319, longitude: -105.0658, locatable: user)
 ````
 
+**Associate with a model in your host application**
+
+This model will only have one *checkin*, because a store will not move.  If the store is delete, the checkin is deleted.
+
+````
+class Store < ActiveRecord::Base
+  validates :name, presence: true
+  
+  has_one :illlocation_checkin, :as => :locatable, :class_name => "Illlocation::Checkin", :dependent => :destroy
+end
+  
+````
+
+This model will only have multiple *checkins*, because a user will move.  If the user is deleted, we're keeping the checkins.
+
+````
+class User < ActiveRecord::Base
+  validates :first_name, :last_name, presence: true
+  
+  has_many :illlocation_checkins, :as => :locatable, :class_name => "Illlocation::Checkin"
+end
+  
+````
+
+**Create an *checkin* when a *store* is created if a lat/lon are provided**
+
+````
+class Api::V1::StoresController < ApiController
+  def create
+    @store = Store.new(store_params)
+    
+    if @store.save && params.has_key?(:location)
+      Illlocation::Checkin.create(location_params.merge!(locatable: @store))
+    end
+    
+    respond_to do |format|
+      if @store.id?
+        format.json { render :json => @store }
+      else
+        format.json { render :json => {:errors => @store.errors.full_messages}, :status => :unprocessable_entity }
+      end
+    end
+  end
+  
+  private
+  
+  def store_params
+    params.require(:store).permit(:name)
+  end
+  
+  def location_params
+    params.require(:location).permit(:latitude, :longitude)
+  end
+end
+````
+
+**More coming soon...**
+
 ## Example
-*To be done:* This [sharknado tracker app](https://github.com/illCorp/sharknado_tracker) demonstrates some common usage.
+**Todo:** This [sharknado tracker app](https://github.com/illCorp/sharknado_tracker) allows users to input sharknado sightings and demonstrates some common usage.
 
 ## Contributing
-Our goal with this project was to quickly extract and refactor some common location related code that is in several projects.  We're not sure how much time we'll spend maintaining and we may get more formal about the contribution process later.  For now - send us anything.
+Our goal with this project was to quickly extract and refactor some common PostGIS location related code that we have in several projects.  We're not sure how much time we'll spend maintaining but we may get more formal about the contribution process later.  For now - send us anything.
 	
 ## License
 This project rocks and uses MIT-LICENSE.
