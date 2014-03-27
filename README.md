@@ -33,9 +33,15 @@ rake illlocation:install:migrations
 rake db:migrate SCOPE=illlocation
 ````
 
-### 5.  You should have Illlocation models available
+### 5.  You should have Illlocation endpoints and available
 ````
-rails console
+$ rake routes
+Routes for Illlocation::Engine:
+                 locations POST /locations(.:format)                  illlocation/locations#create
+find_near_lat_lon_checkins GET  /checkins/find_near_lat_lon(.:format) illlocation/checkins#find_near_lat_lon
+                  checkins POST /checkins(.:format)                   illlocation/checkins#create
+
+$ rails console
 2.1.0 :006 > Illlocation::Checkin.count
    (3.8ms)  SELECT f_geometry_column,coord_dimension,srid,type FROM geometry_columns WHERE f_table_name='illlocation_checkins'
    (0.6ms)  SELECT COUNT(*) FROM "illlocation_checkins"
@@ -55,10 +61,10 @@ rails console
 * **Tag**: belongs to a location. Ex: gas station, taco stand 
 
 ## Usage
-**Manually create a Checkin** 
+**Manually create an Illlocation::Checkin** 
 
 ````
-Checkin.create(latitude: 39.9319, longitude: -105.0658, locatable_id: 1, locatable_type: "User")
+Illlocation::Checkin.create(latitude: 39.9319, longitude: -105.0658, locatable_id: 1, locatable_type: "User")
 ````
 ````
 user = User.first
@@ -67,7 +73,7 @@ Illlocation::Checkin.create(latitude: 39.9319, longitude: -105.0658, locatable: 
 
 **Associate with a model in your host application**
 
-This model will only have one *checkin*, because a store will not move.  If the store is delete, the checkin is deleted.
+This model will only have one *Illlocation::Checkin*, because a store will not move.  If the store is delete, the checkin is deleted.
 
 ````
 class Store < ActiveRecord::Base
@@ -78,7 +84,7 @@ end
   
 ````
 
-This model will only have multiple *checkins*, because a user will move.  If the user is deleted, we're keeping the checkins.
+This model will only have multiple *Illlocation::Checkins*, because a user will move.  If the user is deleted, we're keeping the checkins.
 
 ````
 class User < ActiveRecord::Base
@@ -89,7 +95,7 @@ end
   
 ````
 
-**Create an *checkin* when a *store* is created if a lat/lon are provided**
+**Create an *Illlocation::Checkin* when a *Store* is created if a lat/lon are provided**
 
 ````
 class Api::V1::StoresController < ApiController
@@ -119,6 +125,37 @@ class Api::V1::StoresController < ApiController
     params.require(:location).permit(:latitude, :longitude)
   end
 end
+````
+
+**Find locatables nearby**
+
+This method allows us to find Stores nearby the given lat/lon.
+
+````
+class Store < ActiveRecord::Base
+  validates :name, presence: true
+  
+  has_one :illlocation_checkin, :as => :locatable, :class_name => "Illlocation::Checkin", :dependent => :destroy
+  
+  DEFFAULT_SEARCH_DISTANCE_METERS = 10 * 1600 #10 miles
+  
+  def self.find_nearby(search_params)
+    latitude = search_params[:latitude]
+    longitude = search_params[:longitude]
+    distance = search_params[:distance] || DEFFAULT_SEARCH_DISTANCE_METERS
+    filters = {
+      distance: distance,
+      locatable_types: ["Store"]
+    }
+    
+    checkins = Illlocation::Checkin.find_near_lat_lon(latitude, longitude, filters)
+    if checkins
+      store_ids = checkins.map(&:locatable_id)
+      Store.find_all_by_id(post_ids)
+    else
+      nil
+    end
+  end
 ````
 
 **More coming soon...**
